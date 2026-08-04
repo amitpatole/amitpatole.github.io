@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amit Patole — verified-AI projects</title>
+<meta name="description" content="Projects by Amit Patole: the Verel organism (verified agents, eyes, ears, vitals) and standalone tools — latenzy, tessera, assaylab, gapcert.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f1; --surface:#fffdf9; --panel:#efece4;
+    --ink:#1b1a17; --ink-muted:#6b6862; --ink-faint:#918d84; --rule:#e3ded4;
+    --accent:#566472; --accent-ink:#3c4653;
+    --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+    --sans:"Inter",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;font-size:17px;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  header{padding:72px 0 40px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 18px}
+  h1{font-family:var(--serif);font-weight:600;font-size:40px;line-height:1.1;margin:0 0 6px;letter-spacing:-.01em}
+  h1 .tick{display:block;width:2.4rem;height:2px;background:var(--accent);margin-bottom:20px}
+  .lede{font-size:19px;color:var(--ink-muted);max-width:60ch;margin:14px 0 0}
+  section{padding:8px 0 20px}
+  h2{font-family:var(--serif);font-weight:600;font-size:15px;letter-spacing:.02em;color:var(--ink-muted);
+     text-transform:uppercase;margin:40px 0 6px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:18px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);padding:22px 22px 20px;display:flex;flex-direction:column;text-decoration:none;color:inherit;position:relative}
+  .card:hover{background:var(--panel)}
+  .card .name{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--ink);display:flex;align-items:baseline;gap:9px}
+  .card .role{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
+  .card .desc{color:var(--ink-muted);font-size:15px;margin:9px 0 14px;flex:1}
+  .card .links{font-family:var(--mono);font-size:12.5px;color:var(--ink-faint)}
+  .card .links a{color:var(--accent-ink);text-decoration:none}
+  .card .links a:hover{text-decoration:underline}
+  .card .arrow{color:var(--ink-faint);margin-left:auto;font-size:15px}
+  footer{border-top:1px solid var(--rule);margin-top:56px;padding:28px 0 64px;color:var(--ink-faint);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  footer .mark{font-family:var(--serif);font-style:italic;color:var(--accent-ink)}
+  footer a{color:var(--ink-muted);text-decoration:none}
+  footer a:hover{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Amit Patole</p>
+    <h1><span class="tick"></span>Verified AI, built in the open.</h1>
+    <p class="lede">A family of tools for AI systems where nothing is &ldquo;done&rdquo; until a
+      grader returns a verdict &mdash; the Verel organism and a set of standalone products.
+      Each links to its own documentation.</p>
+  </header>
+
+  <section>
+    <h2>The Verel organism</h2>
+    <div class="grid">
+      <a class="card" href="https://amitpatole.github.io/verel/">
+        <div class="name">Verel <span class="role">brain</span></div>
+        <div class="desc">Verified agents: nothing is &ldquo;done&rdquo; until a grader returns a verdict &mdash; verification, compounding memory, a fleet, agent-run CI/CD.</div>
+        <div class="links">docs &middot; <a href="https://github.com/amitpatole/verel">GitHub</a> <span class="arrow">&rarr;</span></div>
+      </a>
+      <a class="card" href="https://amitpatole.github.io/agent-vision/">
+        <div class="name">AgentVision <span class="role">eyes</span></div>
+        <div class="desc">Eyes for AI agents: a machine-graded visual feedback loop (DOM/contrast/OCR-grounded) agents consume to self-correct before claiming done.</div>
+        <div class="links">docs &middot; <a href="https://github.com/amitpatole/agent-vision">GitHub</a> <span class="arrow">&rarr;</span></div>
+      </a>
+      <a class="card" href="https://amitpatole.github.io/audel/">
+        <div class="name">Audel <span class="role">ears</span></div>
+        <div class="desc">Ears for AI agents: a machine-graded audio/voice feedback loop, grounded in a verdict on the produced sound.</div>
+        <div class="links">docs &middot; <a href="https://github.com/amitpatole/audel">GitHub</a> <span class="arrow">&rarr;</span></div>
+      </a>
+      <a class="card" href="https://amitpatole.github.io/vitel/">
+        <div class="name">Vitel <span class="role">vitals</span></div>
+        <div class="desc">Vitals for AI agents: graded observability returning pass/warn/fail on metrics, SLOs, and error budgets, grounded in a Metric.</div>
+        <div class="links">docs &middot; <a href="https://github.com/amitpatole/vitel">GitHub</a> <span class="arrow">&rarr;</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+    <div class="grid">
+      <a class="card" href="https://amitpatole.github.io/latenzy/">
+        <div class="name">latenzy <span class="role">llm latency</span></div>
+        <div class="desc">Per-model LLM latency monitoring &mdash; a Prometheus exporter and Grafana dashboards for Claude, OpenAI, and Gemini. Model A vs model B, not lab-level.</div>
+        <div class="links">docs &middot; <a href="https://github.com/amitpatole/latenzy">GitHub</a> <span class="arrow">&rarr;</span></div>
+      </a>
+      <a class="card" href="https://amitpatole.github.io/tessera/">
+        <div class="name">Tessera <span class="role">attested analytics</span></div>
+        <div class="desc">Attested NL&rarr;analytics for regulated finance: every number ships with the executed SQL, a runtime verdict, and a signed, auditor-verifiable receipt.</div>
+        <div class="links">docs &middot; <a href="https://github.com/amitpatole/tessera">GitHub</a> <span class="arrow">&rarr;</span></div>
+      </a>
+      <a class="card" href="https://amitpatole.github.io/assaylab/">
+        <div class="name">assaylab <span class="role">validation intel</span></div>
+        <div class="desc">Validation intelligence: attested test-selection with verifiable confidence bounds, failure-signature RCA, and CI analytics.</div>
+        <div class="links">docs &middot; <a href="https://github.com/amitpatole/assaylab">GitHub</a> <span class="arrow">&rarr;</span></div>
+      </a>
+      <a class="card" href="https://amitpatole.github.io/gapcert/">
+        <div class="name">gapcert <span class="role">airgapped tls</span></div>
+        <div class="desc">Publicly-trusted TLS certificates for airgapped and egress-restricted fleets &mdash; an ACME DNS-01 broker, agents, and offline courier mode.</div>
+        <div class="links">docs &middot; <a href="https://github.com/amitpatole/gapcert">GitHub</a> <span class="arrow">&rarr;</span></div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <span class="mark">&mdash; amitpatole</span>
+    <span><a href="https://github.com/amitpatole">github.com/amitpatole</a></span>
+  </footer>
+</div>
+</body>
+</html>
