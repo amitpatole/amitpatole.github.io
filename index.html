@@ -33,17 +33,57 @@
   section{padding:8px 0 20px}
   h2{font-family:var(--serif);font-weight:600;font-size:15px;letter-spacing:.02em;color:var(--ink-muted);
      text-transform:uppercase;margin:40px 0 6px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+
+  /* Grid of cards */
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:18px}
   @media(max-width:640px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--surface);padding:22px 22px 20px;display:flex;flex-direction:column;text-decoration:none;color:inherit;position:relative}
+
+  /* Card — div, not anchor, to allow real nested links */
+  .card{
+    background:var(--surface);padding:22px 22px 20px;
+    display:flex;flex-direction:column;
+    position:relative;
+    transition:background .15s ease;
+  }
   .card:hover{background:var(--panel)}
-  .card .name{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--ink);display:flex;align-items:baseline;gap:9px}
+
+  /* Full-card docs overlay — sits behind content */
+  .card-link{
+    position:absolute;inset:0;z-index:0;
+    display:block;
+  }
+  /* Keyboard focus ring on the overlay */
+  .card-link:focus-visible{
+    outline:2px solid var(--accent-ink);
+    outline-offset:-3px;
+  }
+
+  .card .name{
+    font-family:var(--serif);font-weight:600;font-size:20px;color:var(--ink);
+    display:flex;align-items:baseline;gap:9px;
+    position:relative;z-index:1;pointer-events:none;
+  }
   .card .role{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
-  .card .desc{color:var(--ink-muted);font-size:15px;margin:9px 0 14px;flex:1}
-  .card .links{font-family:var(--mono);font-size:12.5px;color:var(--ink-faint)}
-  .card .links a{color:var(--accent-ink);text-decoration:none}
-  .card .links a:hover{text-decoration:underline}
-  .card .arrow{color:var(--ink-faint);margin-left:auto;font-size:15px}
+  .card .desc{color:var(--ink-muted);font-size:15px;margin:9px 0 14px;flex:1;position:relative;z-index:1;pointer-events:none}
+
+  /* Links row — sits above the overlay so clicks reach the anchors */
+  .card .links{
+    font-family:var(--mono);font-size:12.5px;color:var(--ink-faint);
+    display:flex;align-items:center;gap:8px;
+    position:relative;z-index:1;
+  }
+  .card .links a{
+    color:var(--accent-ink);text-decoration:none;
+    padding:1px 0;
+    border-bottom:1px solid transparent;
+    transition:border-color .12s ease, color .12s ease;
+  }
+  .card .links a:hover{border-bottom-color:var(--accent-ink)}
+  .card .links .sep{color:var(--rule);user-select:none}
+  .card .links .gh-link{display:flex;align-items:center;gap:4px}
+  .card .links .gh-link svg{width:13px;height:13px;flex-shrink:0;opacity:.7;transition:opacity .12s}
+  .card .links .gh-link:hover svg{opacity:1}
+
   footer{border-top:1px solid var(--rule);margin-top:56px;padding:28px 0 64px;color:var(--ink-faint);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
   footer .mark{font-family:var(--serif);font-style:italic;color:var(--accent-ink)}
   footer a{color:var(--ink-muted);text-decoration:none}
@@ -63,52 +103,126 @@
   <section>
     <h2>The Verel organism</h2>
     <div class="grid">
-      <a class="card" href="https://amitpatole.github.io/verel/">
+
+      <div class="card">
+        <a class="card-link" href="https://amitpatole.github.io/verel/" aria-label="Verel docs"></a>
         <div class="name">Verel <span class="role">brain</span></div>
         <div class="desc">Verified agents: nothing is &ldquo;done&rdquo; until a grader returns a verdict &mdash; verification, compounding memory, a fleet, agent-run CI/CD.</div>
-        <div class="links">docs &middot; <a href="https://github.com/amitpatole/verel">GitHub</a> <span class="arrow">&rarr;</span></div>
-      </a>
-      <a class="card" href="https://amitpatole.github.io/agent-vision/">
+        <div class="links">
+          <a href="https://amitpatole.github.io/verel/">docs</a>
+          <span class="sep">&middot;</span>
+          <a class="gh-link" href="https://github.com/amitpatole/verel" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <a class="card-link" href="https://amitpatole.github.io/agent-vision/" aria-label="AgentVision docs"></a>
         <div class="name">AgentVision <span class="role">eyes</span></div>
         <div class="desc">Eyes for AI agents: a machine-graded visual feedback loop (DOM/contrast/OCR-grounded) agents consume to self-correct before claiming done.</div>
-        <div class="links">docs &middot; <a href="https://github.com/amitpatole/agent-vision">GitHub</a> <span class="arrow">&rarr;</span></div>
-      </a>
-      <a class="card" href="https://amitpatole.github.io/audel/">
+        <div class="links">
+          <a href="https://amitpatole.github.io/agent-vision/">docs</a>
+          <span class="sep">&middot;</span>
+          <a class="gh-link" href="https://github.com/amitpatole/agent-vision" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <a class="card-link" href="https://amitpatole.github.io/audel/" aria-label="Audel docs"></a>
         <div class="name">Audel <span class="role">ears</span></div>
         <div class="desc">Ears for AI agents: a machine-graded audio/voice feedback loop, grounded in a verdict on the produced sound.</div>
-        <div class="links">docs &middot; <a href="https://github.com/amitpatole/audel">GitHub</a> <span class="arrow">&rarr;</span></div>
-      </a>
-      <a class="card" href="https://amitpatole.github.io/vitel/">
+        <div class="links">
+          <a href="https://amitpatole.github.io/audel/">docs</a>
+          <span class="sep">&middot;</span>
+          <a class="gh-link" href="https://github.com/amitpatole/audel" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <a class="card-link" href="https://amitpatole.github.io/vitel/" aria-label="Vitel docs"></a>
         <div class="name">Vitel <span class="role">vitals</span></div>
         <div class="desc">Vitals for AI agents: graded observability returning pass/warn/fail on metrics, SLOs, and error budgets, grounded in a Metric.</div>
-        <div class="links">docs &middot; <a href="https://github.com/amitpatole/vitel">GitHub</a> <span class="arrow">&rarr;</span></div>
-      </a>
+        <div class="links">
+          <a href="https://amitpatole.github.io/vitel/">docs</a>
+          <span class="sep">&middot;</span>
+          <a class="gh-link" href="https://github.com/amitpatole/vitel" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
     </div>
   </section>
 
   <section>
     <h2>Projects</h2>
     <div class="grid">
-      <a class="card" href="https://amitpatole.github.io/latenzy/">
+
+      <div class="card">
+        <a class="card-link" href="https://amitpatole.github.io/latenzy/" aria-label="latenzy docs"></a>
         <div class="name">latenzy <span class="role">llm latency</span></div>
         <div class="desc">Per-model LLM latency monitoring &mdash; a Prometheus exporter and Grafana dashboards for Claude, OpenAI, and Gemini. Model A vs model B, not lab-level.</div>
-        <div class="links">docs &middot; <a href="https://github.com/amitpatole/latenzy">GitHub</a> <span class="arrow">&rarr;</span></div>
-      </a>
-      <a class="card" href="https://amitpatole.github.io/tessera/">
+        <div class="links">
+          <a href="https://amitpatole.github.io/latenzy/">docs</a>
+          <span class="sep">&middot;</span>
+          <a class="gh-link" href="https://github.com/amitpatole/latenzy" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <a class="card-link" href="https://amitpatole.github.io/tessera/" aria-label="Tessera docs"></a>
         <div class="name">Tessera <span class="role">attested analytics</span></div>
         <div class="desc">Attested NL&rarr;analytics for regulated finance: every number ships with the executed SQL, a runtime verdict, and a signed, auditor-verifiable receipt.</div>
-        <div class="links">docs &middot; <a href="https://github.com/amitpatole/tessera">GitHub</a> <span class="arrow">&rarr;</span></div>
-      </a>
-      <a class="card" href="https://amitpatole.github.io/assaylab/">
+        <div class="links">
+          <a href="https://amitpatole.github.io/tessera/">docs</a>
+          <span class="sep">&middot;</span>
+          <a class="gh-link" href="https://github.com/amitpatole/tessera" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <a class="card-link" href="https://amitpatole.github.io/assaylab/" aria-label="assaylab docs"></a>
         <div class="name">assaylab <span class="role">validation intel</span></div>
         <div class="desc">Validation intelligence: attested test-selection with verifiable confidence bounds, failure-signature RCA, and CI analytics.</div>
-        <div class="links">docs &middot; <a href="https://github.com/amitpatole/assaylab">GitHub</a> <span class="arrow">&rarr;</span></div>
-      </a>
-      <a class="card" href="https://amitpatole.github.io/gapcert/">
+        <div class="links">
+          <a href="https://amitpatole.github.io/assaylab/">docs</a>
+          <span class="sep">&middot;</span>
+          <a class="gh-link" href="https://github.com/amitpatole/assaylab" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <a class="card-link" href="https://amitpatole.github.io/gapcert/" aria-label="gapcert docs"></a>
         <div class="name">gapcert <span class="role">airgapped tls</span></div>
         <div class="desc">Publicly-trusted TLS certificates for airgapped and egress-restricted fleets &mdash; an ACME DNS-01 broker, agents, and offline courier mode.</div>
-        <div class="links">docs &middot; <a href="https://github.com/amitpatole/gapcert">GitHub</a> <span class="arrow">&rarr;</span></div>
-      </a>
+        <div class="links">
+          <a href="https://amitpatole.github.io/gapcert/">docs</a>
+          <span class="sep">&middot;</span>
+          <a class="gh-link" href="https://github.com/amitpatole/gapcert" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+
     </div>
   </section>
 
