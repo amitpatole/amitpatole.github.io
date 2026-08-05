@@ -107,13 +107,37 @@
   }
   .bio-links a:hover{border-bottom-color:var(--accent-ink)}
   .bio-links svg{width:14px;height:14px;flex-shrink:0;opacity:.65}
-  .bio .pub{
-    margin-top:18px;padding:14px 18px;
-    background:var(--surface);border-left:2px solid var(--accent);
-    font-family:var(--serif);font-size:15px;color:var(--ink-muted);line-height:1.6;
+  /* Publications list */
+  .pub-list{margin:28px 0 0;display:flex;flex-direction:column;gap:0}
+  .pub-list h3{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-faint);margin:0 0 12px;
   }
-  .bio .pub a{color:var(--accent-ink);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .12s}
-  .bio .pub a:hover{border-bottom-color:var(--accent-ink)}
+  .pub-subhead{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-faint);margin:24px 0 8px;border-top:1px solid var(--rule);padding-top:16px;
+  }
+  .pub-item{
+    display:grid;grid-template-columns:40px 1fr;gap:0 16px;
+    padding:12px 0;border-bottom:1px solid var(--rule);
+    align-items:start;
+  }
+  .pub-item:last-child{border-bottom:none}
+  .pub-year{
+    font-family:var(--mono);font-size:11px;color:var(--ink-faint);
+    padding-top:3px;
+  }
+  .pub-title{
+    font-family:var(--serif);font-size:16px;line-height:1.5;color:var(--ink);
+    margin:0 0 4px;
+  }
+  .pub-meta{font-family:var(--sans);font-size:13px;color:var(--ink-faint);margin:0 0 5px}
+  .pub-doi{font-family:var(--mono);font-size:12px}
+  .pub-doi a{
+    color:var(--accent-ink);text-decoration:none;
+    border-bottom:1px solid transparent;transition:border-color .12s;
+  }
+  .pub-doi a:hover{border-bottom-color:var(--accent-ink)}
 
   footer{border-top:1px solid var(--rule);margin-top:56px;padding:28px 0 64px;color:var(--ink-faint);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
   footer .mark{font-family:var(--serif);font-style:italic;color:var(--accent-ink)}
@@ -135,12 +159,77 @@
 
     <p>Working deep in AI platforms eventually crystallized a question I had been circling for years: when a model produces an output, what does it actually mean for the work to be done? Not that a pipeline succeeded or a test passed. Done in the sense that you&rsquo;d stake your name on it. A 2026 paper I published explored one edge of that question, asking whether quantum-optimization can find routing solutions across a multi-agent LLM cascade that classical greedy approaches miss.</p>
 
-    <div class="pub">
-      Patole, A. (2026). Quantum-Enhanced LLM Cascade Routing: A QAOA Approach to Cost-Optimal Model Selection in Multi-Agent Systems. <em>Preprints.org</em> (MDPI AG), April 2026.<br>
-      <a href="https://doi.org/10.20944/preprints202604.0413.v1" target="_blank" rel="noopener">DOI: 10.20944/preprints202604.0413.v1</a> &middot; <a href="https://doi.org/10.5281/zenodo.19253980" target="_blank" rel="noopener">Zenodo: 10.5281/zenodo.19253980</a>
-    </div>
-
     <p>The open-source work below is the engineering answer to the same question. The Verel organism and its standalone companions are built on one conviction: nothing compounds until a grader returns a verdict.</p>
+
+    <div class="pub-list">
+      <h3>Publications</h3>
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div>
+          <div class="pub-title">VANTAGE: AI Security Observability, Blast Radius, and Guarded Mitigation</div>
+          <div class="pub-meta">Technical Design Document v1.0 &middot; Zenodo, August 2026</div>
+          <div class="pub-doi"><a href="https://doi.org/10.5281/zenodo.21743977" target="_blank" rel="noopener">10.5281/zenodo.21743977</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div>
+          <div class="pub-title">VR Time Travel: A Personal Nostalgia Engine with Real-Time AI Scene Correction</div>
+          <div class="pub-meta">Zenodo, July 2026</div>
+          <div class="pub-doi"><a href="https://doi.org/10.5281/zenodo.21343168" target="_blank" rel="noopener">10.5281/zenodo.21343168</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div>
+          <div class="pub-title">Attested Test Selection with a Verifiable Confidence Bound</div>
+          <div class="pub-meta">Zenodo, July 2026</div>
+          <div class="pub-doi"><a href="https://doi.org/10.5281/zenodo.21231687" target="_blank" rel="noopener">10.5281/zenodo.21231687</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div>
+          <div class="pub-title">Quantum-Enhanced LLM Cascade Routing: A QAOA Approach to Cost-Optimal Model Selection in Multi-Agent Systems</div>
+          <div class="pub-meta">Preprints.org (MDPI AG), April 2026</div>
+          <div class="pub-doi"><a href="https://doi.org/10.20944/preprints202604.0413.v1" target="_blank" rel="noopener">10.20944/preprints202604.0413.v1</a> &middot; <a href="https://doi.org/10.5281/zenodo.19253980" target="_blank" rel="noopener">Zenodo</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div>
+          <div class="pub-title">Grounded Cognitive Architecture for Enterprise AI Agents: Eliminating Hallucination via Mandatory Tool Execution at Scale</div>
+          <div class="pub-meta">Zenodo, March 2026</div>
+          <div class="pub-doi"><a href="https://doi.org/10.5281/zenodo.19255196" target="_blank" rel="noopener">10.5281/zenodo.19255196</a></div>
+        </div>
+      </div>
+
+      <div class="pub-subhead">Software</div>
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div>
+          <div class="pub-title">latenzy: per-model LLM latency monitoring</div>
+          <div class="pub-meta">Software release v0.2.0 &middot; Zenodo, August 2026</div>
+          <div class="pub-doi"><a href="https://doi.org/10.5281/zenodo.21799202" target="_blank" rel="noopener">10.5281/zenodo.21799202</a></div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div>
+          <div class="pub-title">assaylab: validation intelligence for CI</div>
+          <div class="pub-meta">Software release v0.3.0 &middot; Zenodo, July 2026</div>
+          <div class="pub-doi"><a href="https://doi.org/10.5281/zenodo.21230859" target="_blank" rel="noopener">10.5281/zenodo.21230859</a></div>
+        </div>
+      </div>
+
+    </div>
 
     <div class="bio-links">
       <a href="https://github.com/amitpatole" target="_blank" rel="noopener">
