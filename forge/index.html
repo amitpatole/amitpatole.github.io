@@ -126,13 +126,13 @@
     <div class="flow"><b>start</b> → gatekeeper → policy judges (×2) → scorer → <b>end</b>
          │              │
          └─ rejected    └─ refused (unanimity required)</div>
-    <p>A deterministic gatekeeper runs first, because the cheapest filter should never need a model: intake re-checks, repository state, account age, ownership proof. Then two policy judges <strong>from different model families</strong> must both approve, against a strict global ethical standard, with a high floor on safety and ethics scores. The model's own <code>allowed</code> flag is never trusted on its own; every condition is re-checked in code. Ranking the survivors is plain Python, not a model.</p>
+    <p>A deterministic gatekeeper runs first, because the cheapest filter should never need a model: intake re-checks, repository state, account age, ownership proof. Then two policy judges <strong>from different model families</strong> &mdash; <code>gpt-oss:120b</code> and <code>qwen3.5:397b</code> &mdash; must both approve, against a strict global ethical standard, with a high floor on safety and ethics scores. The model's own <code>allowed</code> flag is never trusted on its own; every condition is re-checked in code. Ranking the survivors is plain Python, not a model.</p>
 
     <h3>Build: a bounded repair loop with escalation</h3>
     <div class="flow"><b>planner</b> → <b>coder</b> → tester → diff guard → <b>reviewer</b> → <b>end</b>
                 ↑         │          │            │
                 └───── repair ←──────┴────────────┘   (bounded; stalls detected)</div>
-    <p>A planner writes an implementation brief. A local model does the volume coding work; repairs escalate to a stronger cloud model. Then three checks run in a deliberate order: <strong>the tests we run ourselves</strong> (never the coder's claim), <strong>deterministic diff guardrails</strong> (so a model never gets to wave through a hard rule), and only then a <strong>reviewer from a different model family than the coder</strong>. Each check returns the same report shape, so the graph routes on one field, the coder receives one kind of feedback, and a repeated failure signature stops the loop instead of burning quota on a stuck agent.</p>
+    <p>A planner (<code>qwen3.5:397b</code>) writes an implementation brief. <code>qwen3-coder:30b</code> runs locally for the volume coding work, because a 30B mixture-of-experts model activates only a few billion parameters per token and fits where a dense model of that size would not; repairs escalate to <code>kimi-k2.7-code</code> in the cloud. Then three checks run in a deliberate order: <strong>the tests we run ourselves</strong> (never the coder's claim), <strong>deterministic diff guardrails</strong> (so a model never gets to wave through a hard rule), and only then a <strong>reviewer from a different model family than the coder</strong> (<code>glm-5.3</code>). Each check returns the same report shape, so the graph routes on one field, the coder receives one kind of feedback, and a repeated failure signature stops the loop instead of burning quota on a stuck agent.</p>
     <p>Publishing &mdash; fork, commit, push, open the pull request &mdash; happens <strong>outside</strong> the graph, reachable only when it ends in <code>approved</code>. That one structural choice means no bug in the agent logic can publish anything.</p>
 
     <h3>Isolation and the trust boundary</h3>
@@ -153,6 +153,8 @@
       <div class="layer"><div class="n">Context</div><div class="d">The exact prompt, split into system, policy, schema and each untrusted section, by share of the window</div></div>
       <div class="layer"><div class="n">Substrate</div><div class="d">GPU memory and utilization, loaded models, container stats, load average, sampled while the run happens</div></div>
     </div>
+
+    <p>Measured on the build machine rather than estimated: one scorer call on a local 20B model recorded 328 prompt tokens in and 206 out at 7.7 tokens per second, with 12.4 seconds of model load time and 2.2 GB of the 4 GB card in use. Re-running one recorded hosted <code>gpt-oss:120b</code> scorer call as a fork, on the local 20B model instead, took 58.6 seconds at 6.7 tokens per second &mdash; and returned a score of 9 where the recorded call had returned 8. That is the point of forking: the disagreement is visible, side by side, on identical input.</p>
 
     <figure>
       <img src="observatory.png" alt="The Forge Observatory dashboard: stat tiles, a request lifecycle chart, a table of models by role with latency and token rates, GPU and memory charts, and a list of recent runs." loading="lazy">
@@ -200,12 +202,12 @@
       <tr><th>Concern</th><th>Approach</th></tr>
       <tr><td>Orchestration</td><td>LangGraph state machines; deterministic routing functions over typed agent output</td></tr>
       <tr><td>Agents</td><td>Five specialized roles &mdash; policy, scorer, planner, coder, reviewer &mdash; each with one job and one typed schema</td></tr>
-      <tr><td>Model routing</td><td>Role-based: local models for volume, larger hosted models for judgment, with automatic fallback on error or invalid output</td></tr>
+      <tr><td>Model routing</td><td>Role-based: <code>qwen3-coder:30b</code> locally for volume; hosted <code>gpt-oss:120b</code>, <code>qwen3.5:397b</code>, <code>kimi-k2.7-code</code> and <code>glm-5.3</code> for judgment, planning and repairs &mdash; each role with a fallback that fires on error, quota, or output that fails schema validation</td></tr>
       <tr><td>Isolation</td><td>Docker with no network, dropped capabilities, read-only root, unprivileged user</td></tr>
       <tr><td>Verification</td><td>Verel attested test verdicts, assaylab root-cause signatures, agentsensory report contract, Vitel SLOs</td></tr>
       <tr><td>Observability</td><td>Purpose-built trace store in SQLite, LangChain callbacks, graph wrappers, a local dashboard, latenzy metrics</td></tr>
       <tr><td>Operations</td><td>SQLite with WAL, systemd timer, tunnel-only exposure, no open ports</td></tr>
-      <tr><td>Hardware</td><td>A single laptop with a small consumer GPU, plus hosted inference for the judgment calls</td></tr>
+      <tr><td>Hardware</td><td>One laptop with a 4 GB GPU, serving local models through Ollama, with Ollama Cloud for the larger judgment models</td></tr>
     </table>
 
     <h2>What is verified, and what is not</h2>
