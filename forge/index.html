@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forge &amp; the Observatory · Amit Patole</title>
+<meta name="description" content="Forge: a multi-agent system that turns feature requests into tested pull requests, and the observability layer built for it — replay-grade tracing, causality threads, prompt anatomy, and forking of any recorded model call.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f1; --surface:#fffdf9; --panel:#efece4;
+    --ink:#1b1a17; --ink-muted:#6b6862; --ink-faint:#918d84; --rule:#e3ded4;
+    --accent:#566472; --accent-ink:#3c4653;
+    --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+    --sans:"Inter",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;font-size:17px;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  header{padding:56px 0 24px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-muted);margin:0 0 18px}
+  .eyebrow a{color:var(--ink-muted);text-decoration:none;border-bottom:1px solid transparent}
+  .eyebrow a:hover{border-bottom-color:var(--ink-muted)}
+  h1{font-family:var(--serif);font-weight:600;font-size:44px;line-height:1.08;margin:0;letter-spacing:-.02em}
+  h1 .tick{display:block;width:2.4rem;height:2px;background:var(--accent);margin-bottom:20px}
+  .lede{font-family:var(--serif);font-size:20px;line-height:1.66;color:var(--ink-muted);max-width:64ch;margin:20px 0 0}
+  section{padding:8px 0 16px}
+  h2{font-family:var(--serif);font-weight:600;font-size:15px;letter-spacing:.02em;color:var(--ink-muted);
+     text-transform:uppercase;margin:44px 0 6px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+  h3{font-family:var(--serif);font-weight:600;font-size:21px;color:var(--ink);margin:30px 0 8px;letter-spacing:-.01em}
+  p{max-width:68ch;margin:0 0 16px}
+  .prose p{font-size:17px;line-height:1.72;color:var(--ink-muted)}
+  .prose p strong{color:var(--ink);font-weight:600}
+  .prose ul{max-width:68ch;color:var(--ink-muted);padding-left:20px;margin:0 0 16px}
+  .prose li{margin:0 0 8px;line-height:1.66}
+  .prose li strong{color:var(--ink);font-weight:600}
+  a{color:var(--accent-ink)}
+  code{font-family:var(--mono);font-size:.88em;background:var(--panel);padding:1px 5px;border-radius:3px}
+
+  .status{
+    border:1px solid var(--rule);background:var(--surface);
+    padding:16px 20px;margin:26px 0 0;
+  }
+  .status .label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);margin:0 0 6px}
+  .status p{margin:0;font-size:15px;color:var(--ink-muted)}
+
+  .pull{
+    font-family:var(--serif);font-size:20px;line-height:1.62;color:var(--ink);
+    border-left:2px solid var(--accent);padding:2px 0 2px 20px;margin:26px 0;max-width:62ch;
+  }
+
+  .flow{
+    font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--ink-muted);
+    background:var(--surface);border:1px solid var(--rule);
+    padding:18px 20px;margin:20px 0;overflow-x:auto;white-space:pre;
+  }
+  .flow b{color:var(--ink);font-weight:500}
+
+  .spec{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px}
+  .spec th{
+    text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-muted);font-weight:400;padding:8px 12px 8px 0;border-bottom:1px solid var(--rule);
+  }
+  .spec td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule);color:var(--ink-muted);vertical-align:top}
+  .spec td:first-child{color:var(--ink);white-space:nowrap}
+  .spec tr:last-child td{border-bottom:none}
+
+  figure{margin:26px 0;border:1px solid var(--rule);background:var(--surface);padding:10px}
+  figure img{display:block;width:100%;height:auto}
+  figcaption{font-size:13.5px;color:var(--ink-faint);padding:10px 4px 2px;line-height:1.55}
+
+  .layers{margin:20px 0;border-top:1px solid var(--rule)}
+  .layer{display:grid;grid-template-columns:132px 1fr;gap:0 18px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .layer .n{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
+  .layer .d{color:var(--ink-muted);font-size:15px}
+  @media(max-width:640px){
+    h1{font-size:34px}
+    .layer{grid-template-columns:1fr;gap:2px}
+  }
+
+  .findings{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:22px 0}
+  @media(max-width:640px){.findings{grid-template-columns:1fr}}
+  .finding{background:var(--surface);padding:20px 20px 18px}
+  .finding .t{font-family:var(--serif);font-weight:600;font-size:18px;color:var(--ink);margin:0 0 7px}
+  .finding p{font-size:15px;color:var(--ink-muted);margin:0}
+
+  footer{border-top:1px solid var(--rule);margin-top:56px;padding:28px 0 64px;color:var(--ink-faint);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  footer .mark{font-family:var(--serif);font-style:italic;color:var(--accent-ink)}
+  footer a{color:var(--ink-muted);text-decoration:none}
+  footer a:hover{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow"><a href="/">&larr; Amit Patole</a> &middot; Case study</p>
+    <h1><span class="tick"></span>Forge, and the<br>Observatory built for it.</h1>
+    <p class="lede">A multi-agent system that takes a plain-English feature request for a public repository, plans it, writes the code, tests it in a sandbox, reviews it, and delivers a pull request &mdash; and the observability layer that makes every one of those steps visible down to the token.</p>
+
+    <div class="status">
+      <p class="label">Status</p>
+      <p>Built and unit-tested end to end; the first submission window opens 19 September 2026. Each stage has been exercised live on the build machine, but a full cycle against a live repository has not run yet, so no pull requests have shipped. Everything below describes what is built and verified, not what is promised.</p>
+    </div>
+  </header>
+
+  <section class="prose">
+    <h2>The problem</h2>
+    <p>Coding agents are easy to demo and hard to trust. The failure is rarely the model writing bad code; it is that nothing independent ever checks the work before it reaches someone else's repository. A pipeline &ldquo;succeeded.&rdquo; A test &ldquo;passed.&rdquo; Neither means the change is correct, safe, or wanted.</p>
+    <p>Forge is the engineering answer to a question I keep returning to: <strong>when a model produces an output, what does it actually mean for the work to be done?</strong> Its rule is that nothing is published until a grader returns a verdict &mdash; and that the graders are not the agent that did the work.</p>
+
+    <div class="pull">Agents make judgments. Deterministic graph edges make decisions. That split is what makes the safety properties testable without a model in the loop.</div>
+
+    <h2>How it works</h2>
+    <p>Requests arrive through a small public site. Ownership is proven by committing a token file to the repository's default branch, so nobody can commission work on someone else's code. Work runs in two-week cycles: one week open for submissions, rated nightly on a public board, then one week of building the winners.</p>
+
+    <h3>Selection: two independent judges, unanimous</h3>
+    <div class="flow"><b>start</b> → gatekeeper → policy judges (×2) → scorer → <b>end</b>
+         │              │
+         └─ rejected    └─ refused (unanimity required)</div>
+    <p>A deterministic gatekeeper runs first, because the cheapest filter should never need a model: intake re-checks, repository state, account age, ownership proof. Then two policy judges <strong>from different model families</strong> must both approve, against a strict global ethical standard, with a high floor on safety and ethics scores. The model's own <code>allowed</code> flag is never trusted on its own; every condition is re-checked in code. Ranking the survivors is plain Python, not a model.</p>
+
+    <h3>Build: a bounded repair loop with escalation</h3>
+    <div class="flow"><b>planner</b> → <b>coder</b> → tester → diff guard → <b>reviewer</b> → <b>end</b>
+                ↑         │          │            │
+                └───── repair ←──────┴────────────┘   (bounded; stalls detected)</div>
+    <p>A planner writes an implementation brief. A local model does the volume coding work; repairs escalate to a stronger cloud model. Then three checks run in a deliberate order: <strong>the tests we run ourselves</strong> (never the coder's claim), <strong>deterministic diff guardrails</strong> (so a model never gets to wave through a hard rule), and only then a <strong>reviewer from a different model family than the coder</strong>. Each check returns the same report shape, so the graph routes on one field, the coder receives one kind of feedback, and a repeated failure signature stops the loop instead of burning quota on a stuck agent.</p>
+    <p>Publishing &mdash; fork, commit, push, open the pull request &mdash; happens <strong>outside</strong> the graph, reachable only when it ends in <code>approved</code>. That one structural choice means no bug in the agent logic can publish anything.</p>
+
+    <h3>Isolation and the trust boundary</h3>
+    <p>Untrusted code runs only inside a locked-down container: no network, all capabilities dropped, read-only root, unprivileged user. Dependency installation is a separate, allowlisted, network-enabled phase that the model never influences. The git directory is kept outside the sandbox mount, so nothing running in the container can plant hooks the host would later execute. Request text, repository contents, model output and test output are all treated as untrusted data that crosses into trusted code only as tagged prompt sections or typed fields.</p>
+
+    <h2>Where my open-source tools compose</h2>
+    <p>Forge is where the verified-AI family stops being separate libraries and becomes one system. Every check returns an <a href="https://github.com/amitpatole/agentsensory">agentsensory</a> report, so the graph has a single contract to route on. <a href="https://amitpatole.github.io/verel/">Verel</a> grades the tests inside the sandbox and returns attested verdicts. <a href="https://amitpatole.github.io/assaylab/">assaylab</a> turns raw failures into root-cause signatures the coder can act on. <a href="https://amitpatole.github.io/latenzy/">latenzy</a> measures every model call. <a href="https://amitpatole.github.io/vitel/">Vitel</a> holds the factory itself to SLOs, because &ldquo;the service is up&rdquo; is not &ldquo;the service is working.&rdquo;</p>
+
+    <h2 id="observatory">The Observatory</h2>
+    <p>Latency metrics and a log file answer neither of the questions that actually matter when an agent run goes wrong: <em>why did this specific run do that?</em> and <em>what would have happened if it hadn't?</em> So I built an observability layer for Forge designed around a single image: looking at the system the way a being from a fourth dimension would look at a human &mdash; every layer at once, and the ability to drill down to the smallest part while it is still moving.</p>
+
+    <div class="layers">
+      <div class="layer"><div class="n">Factory</div><div class="d">Cycle phase, the request funnel, model latency and token rates by role, fallbacks and failed attempts, SLO verdicts</div></div>
+      <div class="layer"><div class="n">Graphs</div><div class="d">Selection and build state machines, with the edges actually taken and how often</div></div>
+      <div class="layer"><div class="n">Nodes</div><div class="d">Every node, drawn as a model judgment or a deterministic decision, with the state it read and the state it wrote</div></div>
+      <div class="layer"><div class="n">Rounds</div><div class="d">Repair rounds as stacked slices: which model, which verdicts, when a stall was detected</div></div>
+      <div class="layer"><div class="n">Steps</div><div class="d">Every model call, tool call, sandbox command, git operation and API call, with full inputs and outputs</div></div>
+      <div class="layer"><div class="n">Context</div><div class="d">The exact prompt, split into system, policy, schema and each untrusted section, by share of the window</div></div>
+      <div class="layer"><div class="n">Substrate</div><div class="d">GPU memory and utilization, loaded models, container stats, load average, sampled while the run happens</div></div>
+    </div>
+
+    <figure>
+      <img src="observatory.png" alt="The Forge Observatory dashboard: stat tiles, a request lifecycle chart, a table of models by role with latency and token rates, GPU and memory charts, and a list of recent runs." loading="lazy">
+      <figcaption>The overview layer. Shown with seeded demo data &mdash; the runs, ratings and model figures here are fabricated by a one-command demo seeder, not production traffic.</figcaption>
+    </figure>
+
+    <h3>Three things it does that logs cannot</h3>
+
+    <div class="findings">
+      <div class="finding">
+        <p class="t">Causality threads</p>
+        <p>Every node's state is recorded key by key, content-addressed so an identical value is stored once. Click any output and the trail runs backwards through every value that produced it: this review saw that diff, which came from that guard, after that test report. &ldquo;Why did the reviewer approve this?&rdquo; stops being archaeology.</p>
+      </div>
+      <div class="finding">
+        <p class="t">Prompt anatomy</p>
+        <p>The prompt is rendered as proportional blocks &mdash; system, policy text, schema guide, and each untrusted section &mdash; with what truncation cut off drawn as a hatched gap. On a real build it read: <strong>51% of the diff, never seen by the model.</strong> That blind spot had existed for weeks and was invisible in every log.</p>
+      </div>
+      <div class="finding">
+        <p class="t">Forking a recorded call</p>
+        <p>Any captured model call can be re-run against a different model, with edited messages, side by side with the original. Because publishing lives outside the graph, a fork is only a model call &mdash; it cannot touch a workspace, git, or GitHub. Debugging becomes experimenting.</p>
+      </div>
+      <div class="finding">
+        <p class="t">A bug it found immediately</p>
+        <p>Instrumenting the GitHub client surfaced an ownership check that always raised, because one argument was passed twice. Unit tests never caught it: they mocked that function. In production it would have failed every verification, silently, on the one gate that proves a requester owns the repository.</p>
+      </div>
+    </div>
+
+    <h3>Design decisions worth naming</h3>
+    <ul>
+      <li><strong>Replay-grade capture, not sampling.</strong> Re-running a node requires its complete inputs, so prompts, responses, tool arguments, command output and per-round workspace diffs are all stored, deduplicated by content hash, with a retention window.</li>
+      <li><strong>Every fallback attempt is its own span.</strong> When a model returns output that fails schema validation and the next model quietly succeeds, the failure still appears, with its error type. Silent recovery is how you lose weeks.</li>
+      <li><strong>Telemetry may never break the work.</strong> Every write swallows its own errors; a broken trace store cannot fail a build, and there is a test that proves it.</li>
+      <li><strong>Secrets are redacted before anything is written</strong> &mdash; tokens, keys, their encoded forms, and the push auth header, which is never recorded at all. Tests scan the raw database files to confirm.</li>
+      <li><strong>The dashboard is local-only by construction.</strong> It binds to loopback with no option to bind anything else, refuses any request whose Host is not loopback, requires a custom header plus a local origin on every write, and serves a strict CSP. It displays attacker-controlled text, so it is treated as an injection target itself: the interface builds DOM with text nodes only.</li>
+      <li><strong>No build step, no dependencies, no CDN.</strong> The interface is hand-written ES modules and SVG, which is what lets the content policy be that strict and the whole thing run offline.</li>
+    </ul>
+
+    <h2>Stack</h2>
+    <table class="spec">
+      <tr><th>Concern</th><th>Approach</th></tr>
+      <tr><td>Orchestration</td><td>LangGraph state machines; deterministic routing functions over typed agent output</td></tr>
+      <tr><td>Agents</td><td>Five specialized roles &mdash; policy, scorer, planner, coder, reviewer &mdash; each with one job and one typed schema</td></tr>
+      <tr><td>Model routing</td><td>Role-based: local models for volume, larger hosted models for judgment, with automatic fallback on error or invalid output</td></tr>
+      <tr><td>Isolation</td><td>Docker with no network, dropped capabilities, read-only root, unprivileged user</td></tr>
+      <tr><td>Verification</td><td>Verel attested test verdicts, assaylab root-cause signatures, agentsensory report contract, Vitel SLOs</td></tr>
+      <tr><td>Observability</td><td>Purpose-built trace store in SQLite, LangChain callbacks, graph wrappers, a local dashboard, latenzy metrics</td></tr>
+      <tr><td>Operations</td><td>SQLite with WAL, systemd timer, tunnel-only exposure, no open ports</td></tr>
+      <tr><td>Hardware</td><td>A single laptop with a small consumer GPU, plus hosted inference for the judgment calls</td></tr>
+    </table>
+
+    <h2>What is verified, and what is not</h2>
+    <p>Unit tests cover every route through both graphs with the agents faked out: the happy path, escalation, bounded repair, stall detection, the guardrail blocking before review, reviewer feedback returning to the coder, a security veto, planner refusal, ranking, policy rejection and injection flags. The observability layer has its own suite covering span nesting, secret redaction, causality, the security guards, forking, and the promise that a broken trace store cannot break a build.</p>
+    <p>Verified live on the build machine: typed output from local models, an attested test failure followed by a pass inside the sandbox, a root-cause signature from a real failure, blocked network egress from the container, recorded per-model latency, SLO grading, and a fork of a recorded call re-run against a local model. <strong>Not yet run:</strong> a full cycle end to end against a live repository, which needs the first submission window to open.</p>
+    <p>The design record behind all of this runs to fifty-one numbered decisions, each with its rationale, the alternatives considered, and the trade-off accepted. The repository is private; I am happy to walk through the architecture, the decision record, or the observability layer in detail.</p>
+  </section>
+
+  <footer>
+    <span class="mark">&mdash; amitpatole</span>
+    <span><a href="/">portfolio</a> &middot; <a href="https://github.com/amitpatole">github.com/amitpatole</a></span>
+  </footer>
+</div>
+</body>
+</html>
