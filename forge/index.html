@@ -180,6 +180,11 @@
       </div>
     </div>
 
+    <figure>
+      <img src="run-view.png" alt="One build run in the Observatory: a graph map where the coder node is marked as visited twice with a repair loop, a time river of every span from clone through both coder rounds, and a panel breaking the reviewer's prompt into proportional blocks." loading="lazy">
+      <figcaption>One build run, all layers at once. The graph map marks each node as a model judgment or a deterministic decision and shows the edges actually taken &mdash; here the coder ran twice, through the repair loop. The time river below it nests every span: steps, graph nodes, model attempts, individual calls, tool calls and sandbox commands, at a depth the X-ray control sets. On the right, the reviewer's prompt broken into proportional blocks: policy text 38%, the untrusted sections tagged as such, and the hatched block at the end &mdash; 4,270 characters, 51% of the prompt, cut before the model ever saw it. Seeded demo data.</figcaption>
+    </figure>
+
     <h3>Design decisions worth naming</h3>
     <ul>
       <li><strong>Replay-grade capture, not sampling.</strong> Re-running a node requires its complete inputs, so prompts, responses, tool arguments, command output and per-round workspace diffs are all stored, deduplicated by content hash, with a retention window.</li>
