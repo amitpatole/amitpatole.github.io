@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cgroupguard &middot; Amit Patole</title>
+<meta name="description" content="cgroupguard: an evidence-based, read-only readiness checker for the Kubernetes move from cgroup v1 to cgroup v2. Open source, Apache-2.0.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f1; --surface:#fffdf9; --panel:#efece4;
+    --ink:#1b1a17; --ink-muted:#6b6862; --ink-faint:#918d84; --rule:#e3ded4;
+    --accent:#566472; --accent-ink:#3c4653;
+    --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+    --sans:"Inter",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;font-size:17px;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  header{padding:56px 0 24px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-muted);margin:0 0 18px}
+  .eyebrow a{color:var(--ink-muted);text-decoration:none;border-bottom:1px solid transparent}
+  .eyebrow a:hover{border-bottom-color:var(--ink-muted)}
+  h1{font-family:var(--serif);font-weight:600;font-size:44px;line-height:1.08;margin:0;letter-spacing:-.02em}
+  h1 .tick{display:block;width:2.4rem;height:2px;background:var(--accent);margin-bottom:20px}
+  .lede{font-family:var(--serif);font-size:20px;line-height:1.66;color:var(--ink-muted);max-width:64ch;margin:20px 0 0}
+  section{padding:8px 0 16px}
+  h2{font-family:var(--serif);font-weight:600;font-size:15px;letter-spacing:.02em;color:var(--ink-muted);
+     text-transform:uppercase;margin:44px 0 6px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+  h3{font-family:var(--serif);font-weight:600;font-size:21px;color:var(--ink);margin:30px 0 8px;letter-spacing:-.01em}
+  p{max-width:68ch;margin:0 0 16px}
+  .prose p{font-size:17px;line-height:1.72;color:var(--ink-muted)}
+  .prose p strong{color:var(--ink);font-weight:600}
+  .prose ul{max-width:68ch;color:var(--ink-muted);padding-left:20px;margin:0 0 16px}
+  .prose li{margin:0 0 8px;line-height:1.66}
+  .prose li strong{color:var(--ink);font-weight:600}
+  a{color:var(--accent-ink)}
+  code{font-family:var(--mono);font-size:.88em;background:var(--panel);padding:1px 5px;border-radius:3px}
+
+  .status{
+    border:1px solid var(--rule);background:var(--surface);
+    padding:16px 20px;margin:26px 0 0;
+  }
+  .status .label{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);margin:0 0 6px}
+  .status p{margin:0;font-size:15px;color:var(--ink-muted)}
+
+  .pull{
+    font-family:var(--serif);font-size:20px;line-height:1.62;color:var(--ink);
+    border-left:2px solid var(--accent);padding:2px 0 2px 20px;margin:26px 0;max-width:62ch;
+  }
+
+  .flow{
+    font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--ink-muted);
+    background:var(--surface);border:1px solid var(--rule);
+    padding:18px 20px;margin:20px 0;overflow-x:auto;white-space:pre;
+  }
+  .flow b{color:var(--ink);font-weight:500}
+
+  .spec{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px}
+  .spec th{
+    text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-muted);font-weight:400;padding:8px 12px 8px 0;border-bottom:1px solid var(--rule);
+  }
+  .spec td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule);color:var(--ink-muted);vertical-align:top}
+  .spec td:first-child{color:var(--ink);white-space:nowrap}
+  .spec tr:last-child td{border-bottom:none}
+
+  figure{margin:26px 0;border:1px solid var(--rule);background:var(--surface);padding:10px}
+  figure img{display:block;width:100%;height:auto}
+  figcaption{font-size:13.5px;color:var(--ink-faint);padding:10px 4px 2px;line-height:1.55}
+
+  .layers{margin:20px 0;border-top:1px solid var(--rule)}
+  .layer{display:grid;grid-template-columns:132px 1fr;gap:0 18px;padding:11px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+  .layer .n{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
+  .layer .d{color:var(--ink-muted);font-size:15px}
+  @media(max-width:640px){
+    h1{font-size:34px}
+    .layer{grid-template-columns:1fr;gap:2px}
+  }
+
+  .findings{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:22px 0}
+  @media(max-width:640px){.findings{grid-template-columns:1fr}}
+  .finding{background:var(--surface);padding:20px 20px 18px}
+  .finding .t{font-family:var(--serif);font-weight:600;font-size:18px;color:var(--ink);margin:0 0 7px}
+  .finding p{font-size:15px;color:var(--ink-muted);margin:0}
+
+  footer{border-top:1px solid var(--rule);margin-top:56px;padding:28px 0 64px;color:var(--ink-faint);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  footer .mark{font-family:var(--serif);font-style:italic;color:var(--accent-ink)}
+  footer a{color:var(--ink-muted);text-decoration:none}
+  footer a:hover{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow"><a href="/">&larr; Amit Patole</a> &middot; Open source</p>
+    <h1><span class="tick"></span>cgroupguard</h1>
+    <p class="lede">An evidence-based readiness checker for the Kubernetes move from cgroup v1 to cgroup v2. It tells you which nodes are still on cgroup v1 or a hybrid layout, which workloads are likely to break when their node moves, and how many pods that touches &mdash; then writes a migration plan you can review.</p>
+
+    <div class="status">
+      <p class="label">Status</p>
+      <p>Pre-1.0. Rules are versioned data with cited sources; runtimes without verified documentation are marked <em>review</em>, never pass or fail. Managed-cloud (GKE, EKS, AKS) plans are generated from provider documentation and have not yet been run on those platforms.</p>
+    </div>
+  </header>
+
+  <section class="prose">
+    <h2>The problem</h2>
+    <p>From Kubernetes 1.35 the kubelet refuses to start on a cgroup v1 node by default, and cgroup v1 support is planned for removal. Moving nodes is easy to schedule and hard to scope: the risk sits in the agents and workloads whose runtimes read cgroup files directly.</p>
+
+    <h2>How it behaves</h2>
+    <ul>
+      <li><strong>Read-only by default.</strong> It needs no permissions beyond reading nodes, pods and PodDisruptionBudgets, and creates nothing unless you opt in.</li>
+      <li><strong>Never certifies.</strong> Output is advisory. Missing evidence is reported as <em>unknown</em>, never as <em>ready</em>.</li>
+      <li><strong>Explains itself.</strong> Every finding carries its evidence, why it matters, blast radius, confidence and a primary source.</li>
+      <li><strong>Remediation you can review.</strong> <code>fix --plan</code> changes nothing; applying is a separate, confirmed, audited step.</li>
+    </ul>
+
+    <h2>Use it</h2>
+    <div class="flow">cgroupguard <b>check</b> --context my-cluster            <i># scan nodes and workloads</i>
+cgroupguard <b>check</b> --input snapshot.json -o json   <i># scan a saved snapshot</i>
+cgroupguard <b>fix --plan</b> --context my-cluster       <i># write a runbook, changing nothing</i></div>
+    <p>It can also produce Terraform for GKE, EKS and AKS and Ansible for self-managed nodes, export SARIF and CI pipeline files for gating, and run in-cluster as a controller with metrics. Release archives, packages, a container image and a Helm chart are available, with signature verification documented.</p>
+
+    <h2>Links</h2>
+    <p><a href="https://github.com/amitpatole/cgroupguard">Source and documentation on GitHub</a> &middot; <a href="https://github.com/amitpatole/cgroupguard/releases">Releases</a> &middot; <a href="https://github.com/amitpatole/cgroupguard/issues/new?template=feedback.yml">Leave feedback</a></p>
+    <p>Apache License 2.0. Redistributions keep the NOTICE file, which credits the author.</p>
+  </section>
+
+  <footer>
+    <span class="mark">&mdash; amitpatole</span>
+    <span><a href="/">portfolio</a> &middot; <a href="https://github.com/amitpatole">github.com/amitpatole</a></span>
+  </footer>
+</div>
+</body>
+</html>
