@@ -140,9 +140,15 @@
   .pub-doi a:hover{border-bottom-color:var(--accent-ink)}
 
   /* Featured: Linux kernel contributions */
+  .kernel-badge{display:inline-flex;align-items:center;gap:9px;margin-top:22px;
+    font-family:var(--mono);font-size:12.5px;color:var(--accent-ink);text-decoration:none;
+    background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--accent);padding:7px 12px;
+    transition:background .15s}
+  .kernel-badge:hover{background:var(--panel)}
+  .kernel-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
   .kernel{
     background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--accent);
-    padding:26px 26px 22px;margin:0 0 8px;
+    padding:26px 26px 22px;margin:40px 0 8px;scroll-margin-top:24px;
   }
   .kernel .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);margin:0 0 10px}
   .kernel .title{font-family:var(--serif);font-weight:600;font-size:24px;line-height:1.25;margin:0 0 10px;letter-spacing:-.01em}
@@ -170,32 +176,8 @@
   <header>
     <p class="eyebrow">Amit Patole</p>
     <h1><span class="tick"></span>Platform architect.<br>AI systems engineer.</h1>
+    <a class="kernel-badge" href="#kernel"><span class="dot"></span>Linux kernel contributor &middot; 4 patches accepted by Andrew Morton for mainline&nbsp;&rarr;</a>
   </header>
-
-  <section class="kernel" aria-labelledby="kernel-title">
-    <p class="kicker">Linux kernel &middot; upstream</p>
-    <p class="title" id="kernel-title">Patches accepted for mainline Linux</p>
-    <p class="lede">Four patches accepted by Andrew Morton into the kernel&rsquo;s -mm tree in November 2026, on their way through linux-next to the next mainline merge window. They add KUnit test suites to kernel library code that had none, and fix a NULL-pointer dereference in genalloc that the new tests turned up.</p>
-    <ul>
-      <li>
-        <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-genalloc-v1-1-ba1ea397dfd8@gmail.com/" target="_blank" rel="noopener">lib/genalloc: don&rsquo;t dereference a NULL pool in gen_pool_dma_[z]alloc()</a></div>
-        <div class="why"><span class="tag">bug fix</span>Restores a NULL check lost in v5.3, found by the genalloc tests below.</div>
-      </li>
-      <li>
-        <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-genalloc-v1-2-ba1ea397dfd8@gmail.com/" target="_blank" rel="noopener">lib/tests: add KUnit tests for genalloc</a></div>
-        <div class="why"><span class="tag">tests</span>The allocator drivers use for on-chip SRAM on i.MX, Tegra, Atmel and s390.</div>
-      </li>
-      <li>
-        <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-xxhash-v1-1-7b79cb6a8998@gmail.com/" target="_blank" rel="noopener">lib/tests: add KUnit tests for xxHash</a></div>
-        <div class="why"><span class="tag">tests</span>The checksums behind zstd, btrfs and the erofs on-disk format.</div>
-      </li>
-      <li>
-        <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-ucs2-string-v1-1-28d8e134ba1f@gmail.com/" target="_blank" rel="noopener">lib/tests: add KUnit tests for the UCS-2 string helpers</a></div>
-        <div class="why"><span class="tag">tests</span>EFI variable names: efivarfs on every UEFI PC and server.</div>
-      </li>
-    </ul>
-    <p class="more">More under review in ext4/jbd2 (reviewed by Jan Kara), Tegra host1x, ARM CoreSight and timers. <a href="https://lore.kernel.org/all/?q=f%3Aamit.patole%40gmail.com" target="_blank" rel="noopener">All patches on lore.kernel.org&nbsp;&rarr;</a></p>
-  </section>
 
   <aside class="bio">
     <p>My career started with a screwdriver, not a keyboard. In the late 1990s I was assembling and repairing PCs, everything from 486s to the first Pentium IVs, then reimaging desktops and running helpdesks for enterprise clients in Pune. It taught me the habit I have never lost: understand the machine from the metal up, and never call something fixed until you have watched it work.</p>
@@ -293,6 +275,31 @@
       </a>
     </div>
   </aside>
+
+  <section class="kernel" id="kernel" aria-labelledby="kernel-title">
+    <p class="kicker">Linux kernel &middot; upstream</p>
+    <p class="title" id="kernel-title">Patches accepted for mainline Linux</p>
+    <p class="lede">Four patches accepted by Andrew Morton into the kernel&rsquo;s -mm tree in November 2026, on their way through linux-next to the next mainline merge window. They add KUnit test suites to kernel library code that had none, and fix a NULL-pointer dereference in genalloc that the new tests turned up.</p>
+    <ul>
+      <li>
+        <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-genalloc-v1-1-ba1ea397dfd8@gmail.com/" target="_blank" rel="noopener">lib/genalloc: don&rsquo;t dereference a NULL pool in gen_pool_dma_[z]alloc()</a></div>
+        <div class="why"><span class="tag">bug fix</span>Restores a NULL check lost in v5.3, found by the genalloc tests below.</div>
+      </li>
+      <li>
+        <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-genalloc-v1-2-ba1ea397dfd8@gmail.com/" target="_blank" rel="noopener">lib/tests: add KUnit tests for genalloc</a></div>
+        <div class="why"><span class="tag">tests</span>The allocator drivers use for on-chip SRAM on i.MX, Tegra, Atmel and s390.</div>
+      </li>
+      <li>
+        <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-xxhash-v1-1-7b79cb6a8998@gmail.com/" target="_blank" rel="noopener">lib/tests: add KUnit tests for xxHash</a></div>
+        <div class="why"><span class="tag">tests</span>The checksums behind zstd, btrfs and the erofs on-disk format.</div>
+      </li>
+      <li>
+        <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-ucs2-string-v1-1-28d8e134ba1f@gmail.com/" target="_blank" rel="noopener">lib/tests: add KUnit tests for the UCS-2 string helpers</a></div>
+        <div class="why"><span class="tag">tests</span>EFI variable names: efivarfs on every UEFI PC and server.</div>
+      </li>
+    </ul>
+    <p class="more">More under review in ext4/jbd2 (reviewed by Jan Kara), Tegra host1x, ARM CoreSight and timers. <a href="https://lore.kernel.org/all/?q=f%3Aamit.patole%40gmail.com" target="_blank" rel="noopener">All patches on lore.kernel.org&nbsp;&rarr;</a></p>
+  </section>
 
   <section>
     <div class="verified-lede">Verified AI, built in the open &mdash; a family of tools where nothing is &ldquo;done&rdquo; until a grader returns a verdict.</div>
