@@ -176,7 +176,7 @@
   <header>
     <p class="eyebrow">Amit Patole</p>
     <h1><span class="tick"></span>Platform architect.<br>AI systems engineer.</h1>
-    <a class="kernel-badge" href="#kernel"><span class="dot"></span>Linux kernel contributor &middot; 4 patches accepted by Andrew Morton for mainline&nbsp;&rarr;</a>
+    <a class="kernel-badge" href="#kernel"><span class="dot"></span>Linux kernel contributor &middot; 5 patches accepted for mainline&nbsp;&rarr;</a>
   </header>
 
   <aside class="bio">
@@ -279,7 +279,7 @@
   <section class="kernel" id="kernel" aria-labelledby="kernel-title">
     <p class="kicker">Linux kernel &middot; upstream</p>
     <p class="title" id="kernel-title">Patches accepted for mainline Linux</p>
-    <p class="lede">Four patches accepted by Andrew Morton into the kernel&rsquo;s -mm tree in November 2026, on their way through linux-next to the next mainline merge window. They add KUnit test suites to kernel library code that had none, and fix a NULL-pointer dereference in genalloc that the new tests turned up.</p>
+    <p class="lede">Five patches accepted in November 2026 by two maintainer trees: Andrew Morton&rsquo;s &#8209;mm tree and Ted Ts&rsquo;o&rsquo;s ext4 tree, on their way through linux-next to the next mainline merge window. They add KUnit test suites to kernel library code that had none, fix a NULL-pointer dereference in genalloc that the new tests turned up, and document the ext4 journal&rsquo;s handle flags.</p>
     <ul>
       <li>
         <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-genalloc-v1-1-ba1ea397dfd8@gmail.com/" target="_blank" rel="noopener">lib/genalloc: don&rsquo;t dereference a NULL pool in gen_pool_dma_[z]alloc()</a></div>
@@ -297,8 +297,12 @@
         <div class="patch"><a href="https://lore.kernel.org/all/20261106-kunit-ucs2-string-v1-1-28d8e134ba1f@gmail.com/" target="_blank" rel="noopener">lib/tests: add KUnit tests for the UCS-2 string helpers</a></div>
         <div class="why"><span class="tag">tests</span>EFI variable names: efivarfs on every UEFI PC and server.</div>
       </li>
+      <li>
+        <div class="patch"><a href="https://lore.kernel.org/all/20261105-kdoc-jbd2-h_invalid-v1-1-4bc224f7d0a2@gmail.com/" target="_blank" rel="noopener">jbd2: document the h_invalid handle flag</a></div>
+        <div class="why"><span class="tag">docs</span>ext4&rsquo;s journal layer. Reviewed by Jan Kara, applied by Ted Ts&rsquo;o.</div>
+      </li>
     </ul>
-    <p class="more">More under review in ext4/jbd2 (reviewed by Jan Kara), Tegra host1x, ARM CoreSight and timers. <a href="https://lore.kernel.org/all/?q=f%3Aamit.patole%40gmail.com" target="_blank" rel="noopener">All patches on lore.kernel.org&nbsp;&rarr;</a></p>
+    <p class="more">More under review in Tegra host1x (reviewed by NVIDIA&rsquo;s Mikko Perttunen), ARM CoreSight and timers. <a href="https://lore.kernel.org/all/?q=f%3Aamit.patole%40gmail.com" target="_blank" rel="noopener">All patches on lore.kernel.org&nbsp;&rarr;</a></p>
   </section>
 
   <section>
